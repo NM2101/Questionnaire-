@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Art de l'Accord | Sommelerie Fine</title>
+    <style>
+        :root {
+            --vin-rouge: #58111A;
+            --creme: #FDFCF8;
+            --taupe: #D9D2C5;
+            --noir: #1A1A1A;
+            --succes: #3E5839;
+        }
+
+        body {
+            background-color: var(--creme);
+            color: var(--noir);
+            font-family: 'Garamond', 'Georgia', serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            margin-top: 80px;
+            text-align: center;
+            border-bottom: 1px solid var(--taupe);
+            padding-bottom: 20px;
+            width: 300px;
+        }
+
+        h1 {
+            font-weight: lighter;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            font-size: 1.4rem;
+            margin: 0;
+        }
+
+        .instructions {
+            font-style: italic;
+            font-size: 0.9rem;
+            color: #777;
+            margin-top: 40px;
+        }
+
+        .game-board {
+            display: flex;
+            gap: 100px;
+            margin-top: 60px;
+            align-items: flex-start;
+        }
+
+        .column-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--taupe);
+            margin-bottom: 30px;
+        }
+
+        .drop-zone {
+            width: 280px;
+            padding: 25px 0;
+            border-bottom: 1px solid var(--taupe);
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+        }
+
+        .drop-zone.drag-over {
+            border-bottom-color: var(--vin-rouge);
+            background-color: rgba(88, 17, 26, 0.02);
+        }
+
+        .wine-item {
+            padding: 15px 30px;
+            border: 1px solid var(--taupe);
+            background: white;
+            cursor: grab;
+            margin-bottom: 20px;
+            text-align: center;
+            transition: 0.3s;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+        }
+
+        .wine-item:hover {
+            border-color: var(--vin-rouge);
+            color: var(--vin-rouge);
+        }
+
+        .matched {
+            color: var(--vin-rouge);
+            font-style: italic;
+            border-bottom: 1px solid transparent;
+        }
+
+        #message {
+            margin-top: 50px;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--vin-rouge);
+            opacity: 0;
+            transition: opacity 1s;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Accord Parfait</h1>
+    </header>
+
+    <p class="instructions">Associez le cru au mets délicat</p>
+
+    <div class="game-board">
+        <div>
+            <div class="column-label">Mets</div>
+            <div class="drop-zone" data-target="bordeaux">Canard laqué au miel</div>
+            <div class="drop-zone" data-target="sancerre">Crottin de Chavignol</div>
+            <div class="drop-zone" data-target="champagne">Caviar Osciètre</div>
+            <div class="drop-zone" data-target="condrieu">Noix de Saint-Jacques au safran</div>
+        </div>
+
+        <div>
+            <div class="column-label">Flacons</div>
+            <div id="vin-list">
+                <div class="wine-item" draggable="true" id="sancerre">Sancerre Blanc</div>
+                <div class="wine-item" draggable="true" id="bordeaux">Saint-Julien (Rouge)</div>
+                <div class="wine-item" draggable="true" id="condrieu">Condrieu (Viognier)</div>
+                <div class="wine-item" draggable="true" id="champagne">Champagne Blanc de Blancs</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="message">L'équilibre est atteint.</div>
+
+    <script>
+        const wineItems = document.querySelectorAll('.wine-item');
+        const dropZones = document.querySelectorAll('.drop-zone');
+        let matches = 0;
+
+        wineItems.forEach(item => {
+            item.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', e.target.id);
+            });
+        });
+
+        dropZones.forEach(zone => {
+            zone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                zone.classList.add('drag-over');
+            });
+
+            zone.addEventListener('dragleave', () => {
+                zone.classList.remove('drag-over');
+            });
+
+            zone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                zone.classList.remove('drag-over');
+                const wineId = e.dataTransfer.getData('text/plain');
+                const wineElement = document.getElementById(wineId);
+
+                if (zone.dataset.target === wineId) {
+                    zone.innerHTML = `— ${wineElement.textContent} —`;
+                    zone.classList.add('matched');
+                    wineElement.style.display = 'none';
+                    matches++;
+                    checkWin();
+                }
+            });
+        });
+
+        function checkWin() {
+            if (matches === 4) {
+                document.getElementById('message').style.opacity = '1';
+            }
+        }
+    </script>
+</body>
+</html>
