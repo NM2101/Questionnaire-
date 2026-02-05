@@ -1,0 +1,147 @@
+:root {
+    --vin-rouge: #58111A;
+    --vin-rouge-clair: #801a26;
+    --creme: #FDFCF8;
+    --taupe: #D9D2C5;
+    --noir: #1A1A1A;
+    --succes: #3E5839;
+    --ombre: rgba(0, 0, 0, 0.05);
+}
+
+body {
+    background-color: var(--creme);
+    color: var(--noir);
+    font-family: 'Garamond', 'Georgia', serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+header {
+    margin-top: 40px;
+    text-align: center;
+    border-bottom: 1px solid var(--taupe);
+    padding-bottom: 20px;
+    width: 100%;
+    max-width: 400px;
+}
+
+h1 {
+    font-weight: lighter;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    font-size: 1.6rem;
+    margin: 0;
+    color: var(--vin-rouge);
+}
+
+.instructions {
+    font-style: italic;
+    font-size: 1rem;
+    color: #888;
+    margin-top: 30px;
+}
+
+/* Plateau de jeu */
+.game-board {
+    display: flex;
+    gap: 60px;
+    margin-top: 40px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.column-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--taupe);
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+/* Zones de dépôt (Les Mets) */
+.drop-zone {
+    width: 300px;
+    min-height: 60px;
+    padding: 20px;
+    border-bottom: 1px solid var(--taupe);
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+    transition: all 0.4s ease;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.drop-zone.drag-over {
+    border-bottom-color: var(--vin-rouge);
+    background-color: rgba(88, 17, 26, 0.05);
+    transform: scale(1.02);
+}
+
+/* Éléments déplaçables (Les Vins) */
+.wine-item {
+    padding: 15px 25px;
+    border: 1px solid var(--taupe);
+    background: white;
+    cursor: grab;
+    margin-bottom: 15px;
+    text-align: center;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+    box-shadow: 2px 2px 10px var(--ombre);
+}
+
+.wine-item:hover {
+    border-color: var(--vin-rouge);
+    color: var(--vin-rouge);
+    box-shadow: 4px 4px 15px rgba(88, 17, 26, 0.1);
+}
+
+.wine-item:active {
+    cursor: grabbing;
+}
+
+/* État quand l'accord est trouvé */
+.matched {
+    color: var(--vin-rouge) !important;
+    font-style: italic;
+    font-weight: bold;
+    border-bottom: 2px solid var(--vin-rouge);
+    animation: fadeInMatch 0.6s ease;
+}
+
+@keyframes fadeInMatch {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Message de victoire */
+#message {
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--vin-rouge);
+    opacity: 0;
+    transition: opacity 1s;
+    border: 1px solid var(--vin-rouge);
+}
+
+/* Adaptabilité Mobile */
+@media (max-width: 768px) {
+    .game-board {
+        flex-direction: column;
+        gap: 40px;
+    }
+    header { margin-top: 20px; }
+}
